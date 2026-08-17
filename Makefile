@@ -152,6 +152,7 @@ UPROGS=\
 	$U/_touch\
 	$U/_pingpong\
 	$U/_findppid\
+	$U/_primes\
 
 fs.img: mkfs/mkfs README.xv6 $(UPROGS)
 	mkfs/mkfs fs.img README.xv6 $(UPROGS)
