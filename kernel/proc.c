@@ -557,6 +557,10 @@ default_scheduler(void)
   }
 }
 
+void scheduler_for_a1(void){
+     
+}
+
 /* END OF SCHEDULER ALGORITHMS */
 
 // Per-CPU process scheduler.
