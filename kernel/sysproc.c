@@ -146,3 +146,10 @@ sys_waitx(void)
 
   return kwaitx(addr, rtime_addr, stime_addr);
 }
+
+uint64
+sys_getppid(void){
+    struct proc *p=myproc();
+    if(p->parent==0) return 0;
+    return p->parent->pid;
+}
