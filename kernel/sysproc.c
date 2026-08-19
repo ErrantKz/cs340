@@ -165,9 +165,10 @@ sys_setpri(){
 
 uint64
 sys_getpinfo(){
-    struct pinfo* p1;
+    uint64 addr;
+    struct pinfo p1[NPROC];
     struct proc* p2;
-    argaddr(0,(void*)&p1);
+    argaddr(0,&addr);
 
     int i=0;
     for(p2=proc;p2<&proc[NPROC];p2++){
@@ -176,10 +177,11 @@ sys_getpinfo(){
         p1[i].priority=p2->priority;
         p1[i].ticks_1=p2->ticks_1;
         p1[i].ticks_2=p2->ticks_2;
-        safestrcpy(p1[i].name,p2->name,sizeof(p2->name));
+        safestrcpy(p1[i].name,p2->name,sizeof(p1[i].name));
         release(&p2->lock);
         i++;
     }
+    if(copyout(myproc()->pagetable,addr,(char*)p1,sizeof(p1))<0) return -1;
     return 0;
 }
 
