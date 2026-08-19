@@ -27,7 +27,6 @@ struct cpu {
 };
 
 extern struct cpu cpus[NCPU];
-extern struct proc proc[NPROC];
 // per-process data for the trap handling code in trampoline.S.
 // sits in a page by itself just under the trampoline page in the
 // user page table. not specially mapped in the kernel page table.
@@ -113,6 +112,8 @@ struct proc {
   uint ticks_1;
   uint ticks_2; //These are for recording ticks in diffrent priority respectively
 };
+
+extern struct proc proc[NPROC];
 
 struct pinfo{
     int pid;
