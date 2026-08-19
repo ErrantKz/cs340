@@ -175,7 +175,12 @@ sys_getpinfo(){
         acquire(&p2->lock);
         p1[i].pid=p2->pid;
         p1[i].priority=p2->priority;
-        p1[1].ticks
+        p1[i].ticks_1=p2->ticks_1;
+        p1[i].ticks_2=p2->ticks_2;
+        safestrcpy(p1[i].name,p2->name,sizeof(p2->name));
+        release(&p2->lock);
+        i++;
     }
+    return 0;
 }
 

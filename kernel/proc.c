@@ -127,6 +127,7 @@ found:
   p->priority = 10;
   p->runnable_ticks = 0;
   p->sleeping_ticks = 0;
+  p->priority=1; //Adive from tutorial
 
   // Allocate a trapframe page.
   if ((p->trapframe = (struct trapframe *)kalloc()) == 0) {
@@ -557,8 +558,45 @@ default_scheduler(void)
   }
 }
 
-void scheduler_for_a1(void){
-     
+__attribute__((noreturn)) void
+scheduler_for_a1(void){
+     struct proc* p;
+     struct cpu* c=mycpu();
+     c->proc=0;
+
+     while(1){
+        intr_on();
+        for(p=proc;p<&proc[NPROC];p++){
+            acquire(&p->lock);
+            if(p->state!=RUNNABLE || p->priority!=2){
+               release(&p->lock);
+               continue;
+            }
+            c->proc=p;
+            p->state=RUNNING;
+            swtch(&c->context,&p->context);
+            c->proc=0;
+            release(&p->lock);
+        }
+        if(c->proc==0){
+           for(p=proc;p<&proc[NPROC];p++){
+               acquire(&p->lock);
+               if(p->state==RUNNABLE && p->priority==1){
+                  c->proc=p;
+                  p->state=RUNNING;
+                  swtch(&c->context,&p->context);
+                  c->proc=0;
+                  release(&p->lock);
+               }else{
+                  release(&p->lock);
+                  continue;
+               }
+           }
+        }
+        if(c->proc==0){
+           asm volatile("wfi");
+        }
+     }
 }
 
 /* END OF SCHEDULER ALGORITHMS */
@@ -576,7 +614,8 @@ scheduler(void)
 {
   //default_scheduler();
   //priority_scheduler();
-  priority_scheduler2();
+  //priority_scheduler2();
+  scheduler_for_a1();
 }
 
 // Switch to scheduler.  Must hold only p->lock

@@ -82,6 +82,11 @@ usertrap(void)
 
   // give up the CPU if this is a timer interrupt.
   if(which_dev == 2) {
+    struct proc* p=myproc();
+    if(p && p->state==RUNNING){
+       if(p->priority==1) p->ticks_1++;
+       else if(p->priority==2) p->ticks_2++;
+    }
     update_process_times();
     yield();
   }

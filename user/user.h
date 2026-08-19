@@ -8,8 +8,7 @@ struct stat;
 struct pinfo{
     int pid;
     int priority;
-    int state;
-    char pname[20];//20 is chosen for random.
+    char name[16];
     uint ticks_1;
     uint ticks_2;
 };

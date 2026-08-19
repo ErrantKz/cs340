@@ -109,4 +109,7 @@ struct proc {
   int priority;
   uint runnable_ticks;
   uint sleeping_ticks;
+
+  uint ticks_1;
+  uint ticks_2; //These are for recording ticks in diffrent priority respectively
 };
