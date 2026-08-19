@@ -113,3 +113,11 @@ struct proc {
   uint ticks_1;
   uint ticks_2; //These are for recording ticks in diffrent priority respectively
 };
+
+struct pinfo{
+    int pid;
+    int priority;
+    char name[16];
+    uint ticks_1;
+    uint ticks_2;
+}
