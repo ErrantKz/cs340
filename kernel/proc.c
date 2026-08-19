@@ -8,7 +8,7 @@
 
 struct cpu cpus[NCPU];
 
-extern struct proc proc[NPROC];
+struct proc proc[NPROC];
 
 struct proc *initproc;
 
