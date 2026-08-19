@@ -153,3 +153,29 @@ sys_getppid(void){
     if(p->parent==0) return 0;
     return p->parent->pid;
 }
+
+uint64
+sys_setpri(){
+    int n;
+    if(argint(0,&n)<0) return -1;
+    if(n!=2 || n!=1) return -1; //error handler
+    myproc()->priority=n;
+    return 0;
+}
+
+uint64
+sys_getpinfo(){
+    struct pinfo* p1;
+    struct proc* p2;
+
+    if(argptr(0,(void*)&p1,sizeof(struct pinfo*)*NPROC)<0) return -1;
+
+    int i=0;
+    for(p2=proc;p2<&proc[NPROC];p2++){
+        acquire(&p2->lock);
+        p1[i].pid=p2->pid;
+        p1[i].priority=p2->priority;
+        p1[1].ticks
+    }
+}
+

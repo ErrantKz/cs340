@@ -1,6 +1,21 @@
 #define SBRK_ERROR ((char *)-1)
 
 struct stat;
+//Not sure what this struct is defined for. Does it operate the same as pinfo? Could you give
+//more clarifications on this in the comments? Or maybe it contains the state of a process like
+//RUNNABLE, RUNNING, SLEEPING, etc.
+
+struct pinfo{
+    int pid;
+    int priority;
+    int state;
+    char pname[20];//20 is chosen for random.
+    uint ticks_1;
+    uint ticks_2;
+};
+//This struct is defined to align with the parameter form shown in assignment1 spec.
+//As is discussed in ed discussion, a state variable is defined to run through ps command
+//tests.
 
 // system calls
 int fork(void);
@@ -25,6 +40,8 @@ char* sys_sbrk(int,int);
 int pause(int);
 int uptime(void);
 int getppid(void);
+int setpri(int);
+int getpinfo(struct pinfo*);
 
 // ulib.c
 int stat(const char*, struct stat*);
