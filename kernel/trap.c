@@ -84,8 +84,10 @@ usertrap(void)
   if(which_dev == 2) {
     struct proc* p=myproc();
     if(p && p->state==RUNNING){
+       acquire(&p->lock);
        if(p->priority==1) p->ticks_1++;
        else if(p->priority==2) p->ticks_2++;
+       release(&p->lock);
     }
     update_process_times();
     yield();
@@ -160,6 +162,13 @@ kerneltrap()
 
   // give up the CPU if this is a timer interrupt.
   if(which_dev == 2 && myproc() != 0) {
+    struct proc* p=myproc();
+    if(p && p->state==RUNNING){
+       acquire(&p->lock);
+       if(p->priority==1) p->ticks_1++;
+       else if(p->priority==2) p->ticks_2++;
+       release(&p->lock);
+    }
     update_process_times();
     yield();
   }
